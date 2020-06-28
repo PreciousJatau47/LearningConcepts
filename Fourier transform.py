@@ -35,18 +35,18 @@ plt.tight_layout()
 
 
 # Create a signal containing two frequencies: 3 and 5 cycles per second
-f1 = 3
-f2 = 5
-A = 2
+f = [3, 5]
+A = [2, 3]
 nPts = 2000
 tDuration = 5
 t = np.linspace(0,tDuration,nPts)
-xt1 = A*np.sin(2*np.pi*f1*t)
-xt2 = A*np.sin(2*np.pi*f2*t)
-xt = xt1 + xt2
+
+xt = 0
+for i in range(len(f)):
+    xt = xt + A[i]*np.sin(2*np.pi*f[i]*t)
 
 # set winding parameters
-fWind = 3
+fWind = 4
 nPtsWind = 1000
 
 # Wind signal around unit circle at the rate of fWind cycle per second
@@ -58,7 +58,7 @@ axs[0].plot(t, xt)
 axs[0].set_title("x(t)")
 
 axs[1].plot(xtWound.real, xtWound.imag)
-axs[1].set_title("Wounded x(t)")
+axs[1].set_title("Wounded x(t), fWind = {} Hz".format(fWind))
 plt.tight_layout()
 
 # Almost fourier transform
@@ -70,7 +70,7 @@ for fWind in fSamples:
     xtTransform.append((np.mean(xtWound.real), np.mean(xtWound.imag)))
 
 comReal = [x[0] for x in xtTransform]   # center of mass real
-comImag = [x[1] for x in xtTransform]   # center of mass real
+comImag = [x[1] for x in xtTransform]   # center of mass imaginary
 
 plt.figure()
 plt.plot(fSamples, comReal, color = 'blue', linewidth = 2, label = 'real')

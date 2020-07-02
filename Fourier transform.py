@@ -1,9 +1,16 @@
 """ Learning fourier transforms
-Concepts gotten from "But what is the Fourier Transform? A visual introduction"
+from "But what is the Fourier Transform? A visual introduction"
 https://www.youtube.com/watch?v=spUNpyF58BY
+by 3Blue1Brown
 
 Author: Precious Jatau
 """
+
+# TO DO
+# create filter to remove high frequency noise
+# take IFT
+# apply filter to time domain
+# visual filtered signal, fourier transform
 
 # import libraries
 import numpy as np
@@ -35,10 +42,11 @@ plt.tight_layout()
 
 
 # Create a signal containing two frequencies: 3 and 5 cycles per second
+# Note: shorter tDuration lead to more uncertain frequency estimates and vice versa
 f = [3, 5]
-A = [2, 3]
+A = [2, 2]
 nPts = 2000
-tDuration = 5
+tDuration = 4
 t = np.linspace(0,tDuration,nPts)
 
 xt = 0
@@ -46,7 +54,7 @@ for i in range(len(f)):
     xt = xt + A[i]*np.sin(2*np.pi*f[i]*t)
 
 # set winding parameters
-fWind = 4
+fWind = 3
 nPtsWind = 1000
 
 # Wind signal around unit circle at the rate of fWind cycle per second
@@ -67,10 +75,10 @@ xtTransform = []
 fSamples = np.linspace(0,8,nPtsWind)
 for fWind in fSamples:
     xtWound = xt * np.exp(1j * 2 * np.pi * fWind * t)
-    xtTransform.append((np.mean(xtWound.real), np.mean(xtWound.imag)))
+    xtTransform.append(xtWound)
 
-comReal = [x[0] for x in xtTransform]   # center of mass real
-comImag = [x[1] for x in xtTransform]   # center of mass imaginary
+comReal = [np.mean(x.real) for x in xtTransform]   # center of mass real
+comImag = [np.mean(x.imag) for x in xtTransform]   # center of mass imaginary
 
 plt.figure()
 plt.plot(fSamples, comReal, color = 'blue', linewidth = 2, label = 'real')
@@ -80,3 +88,7 @@ plt.ylabel("Center of mass")
 plt.title("Center of mass at different fWind")
 plt.legend()
 plt.show()
+
+# Inverse fourier transform
+
+
